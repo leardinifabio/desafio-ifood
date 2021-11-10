@@ -7,6 +7,6 @@
 	<jsp:attribute name="js"></jsp:attribute>
 	
     <jsp:body>
-    	<h1>iFood</h1>
+    	<h1>Dashboard</h1>
     </jsp:body>
 </t:main>

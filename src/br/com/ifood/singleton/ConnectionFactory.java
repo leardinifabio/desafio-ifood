@@ -29,7 +29,6 @@ public class ConnectionFactory {
 	 * @return Conex�o com o banco de dados
 	 */
 	public Connection getConnection() {
-		Connection connection = null;
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 		
@@ -38,11 +37,11 @@ public class ConnectionFactory {
 			props.put("password", DB_PASSWORD);
 			props.put("defaultRowPrefetch", "20");
 			
-			connection = DriverManager.getConnection(DB_URL, props);
+			return DriverManager.getConnection(DB_URL, props);
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		return connection;
+		return null;
 	}
 	
 	/**
@@ -51,7 +50,7 @@ public class ConnectionFactory {
 	 * @return Inst�ncia de conex�o com o banco de dados
 	 */
 	public static Connection getInstance() { 
-		if (connection.equals(null)) {
+		if (connection == null) {
 			new ConnectionFactory();
 		}
 		return connection;
@@ -62,7 +61,9 @@ public class ConnectionFactory {
 	 * @throws SQLException
 	 */
 	public static void closeConnection() throws SQLException {
-		connection.close();
+		if (connection != null) {
+			connection.close();
+		}
 		connection = null;
 	}
 

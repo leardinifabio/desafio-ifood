@@ -10,32 +10,31 @@ import java.util.Optional;
 
 import br.com.ifood.dao.DAO;
 import br.com.ifood.exception.DBException;
+import br.com.ifood.models.Categoria;
 import br.com.ifood.models.Loja;
 import br.com.ifood.singleton.ConnectionFactory;
 
 
 public class LojaDAO implements DAO<Loja> {
-
-	/* PROPERTIES */
-	
-	private List<Loja> lojas = new ArrayList<Loja>();
-    
-	/* METHODS */
-	
+    	
     @Override
     public Optional<Loja> get(int id) {
-    	Loja user = null;
+    	Loja loja = null;
         Connection connection = null;
     	PreparedStatement preparedStatement = null;
-    	String sql = "SELECT user_id,"
-    			+ "    user_name,"
-    			+ "    email,"
-    			+ "    user_access,"
-    			+ "    active,"
-    			+ "    user_password,"
-    			+ "    created_at "
-    			+ "FROM tb_user "
-    			+ "WHERE user_id = ?";
+    	String sql = "SELECT"
+    			+ "	   loja.id_loja,"
+    			+ "    loja.nr_cnpj,"
+    			+ "    loja.nm_razao_social,"
+    			+ "    loja.nm_loja,"
+    			+ "    loja.nr_telefone,"
+    			+ "    loja.ds_email,"
+    			+ "    loja.cd_plano,"
+    			+ "    categoria.id_categoria,"
+    			+ "    categoria.nm_categoria "
+    			+ "FROM loja"
+    			+ "    INNER JOIN categoria ON loja.id_categoria_loja = categoria.id_categoria "
+    			+ "WHERE loja.id_loja = ?";
     	
     	try {
     		connection = ConnectionFactory.getInstance();
@@ -44,43 +43,52 @@ public class LojaDAO implements DAO<Loja> {
     		ResultSet result = preparedStatement.executeQuery();
     		
     		while(result.next()) {
-    			/*user = new Loja(
-    					result.getInt("user_id"),
-    					result.getString("user_name"), 
-    					result.getString("email"), 
-    					result.getInt("user_access"),
-    					result.getBoolean("active"),
-    					result.getString("user_password"),
-    					result.getDate("created_at")
-					);*/
+    			Categoria categoria = new Categoria(
+    					result.getInt("id_categoria"),
+    					result.getString("nm_categoria")
+					);
+    			
+    			loja = new Loja(
+    					result.getInt("id_loja"),
+    					result.getString("nr_cnpj"), 
+    					result.getString("nm_razao_social"), 
+    					result.getString("nm_loja"),
+    					result.getString("nr_telefone"),
+    					result.getString("ds_email"),
+    					result.getString("cd_plano"),
+    					categoria
+					);
     		}
     	} catch (Exception e) {
-    		System.err.println("[User] " + e.getMessage());
-    		// e.printStackTrace();
+    		e.printStackTrace();
     	} finally {
     		try {
 				ConnectionFactory.closeConnection();
 			} catch (SQLException e) {
-				System.err.println("[Connection Factory] " + e.getMessage());
-	    		// e.printStackTrace();
+	    		e.printStackTrace();
 			}
     	}
     	
-        return Optional.ofNullable(user);
+        return Optional.ofNullable(loja);
     }
     
     @Override
     public List<Loja> getAll() {
+    	List<Loja> lojas = new ArrayList<>();
         Connection connection = null;
     	PreparedStatement preparedStatement = null;
-    	String sql = "SELECT user_id,"
-    			+ "    user_name,"
-    			+ "    email,"
-    			+ "    user_access,"
-    			+ "    active,"
-    			+ "    user_password,"
-    			+ "    created_at "
-    			+ "FROM tb_user";
+    	String sql = "SELECT"
+    			+ "	   loja.id_loja,"
+    			+ "    loja.nr_cnpj,"
+    			+ "    loja.nm_razao_social,"
+    			+ "    loja.nm_loja,"
+    			+ "    loja.nr_telefone,"
+    			+ "    loja.ds_email,"
+    			+ "    loja.cd_plano,"
+    			+ "    categoria.id_categoria,"
+    			+ "    categoria.nm_categoria "
+    			+ "FROM loja"
+    			+ "    INNER JOIN categoria ON loja.id_categoria_loja = categoria.id_categoria";
     	
     	try {
     		connection = ConnectionFactory.getInstance();
@@ -88,26 +96,30 @@ public class LojaDAO implements DAO<Loja> {
     		ResultSet result = preparedStatement.executeQuery();
     		
     		while(result.next()) {
-    			/*Loja user = new Loja(
-    					result.getInt("user_id"),
-    					result.getString("user_name"), 
-    					result.getString("email"), 
-    					result.getInt("user_access"),
-    					result.getBoolean("active"),
-    					result.getString("user_password"),
-    					result.getDate("created_at")
+    			Categoria categoria = new Categoria(
+    					result.getInt("id_categoria"),
+    					result.getString("nm_categoria")
 					);
-    			users.add(user);*/
+    			
+    			Loja loja = new Loja(
+    					result.getInt("id_loja"),
+    					result.getString("nr_cnpj"), 
+    					result.getString("nm_razao_social"), 
+    					result.getString("nm_loja"),
+    					result.getString("nr_telefone"),
+    					result.getString("ds_email"),
+    					result.getString("cd_plano"),
+    					categoria
+					);
+    			lojas.add(loja);
     		}
     	} catch (Exception e) {
-    		System.err.println("[User] " + e.getMessage());
-    		// e.printStackTrace();
+    		e.printStackTrace();
     	} finally {
     		try {
 				ConnectionFactory.closeConnection();
 			} catch (SQLException e) {
-				System.err.println("[Connection Factory] " + e.getMessage());
-	    		// e.printStackTrace();
+	    		e.printStackTrace();
 			}
     	}
     	
@@ -115,88 +127,79 @@ public class LojaDAO implements DAO<Loja> {
     }
     
     @Override
-    public void save(Loja user) throws DBException {
+    public void save(Loja loja) throws DBException {
     	Connection connection = null;
     	PreparedStatement preparedStatement = null;
-    	String sql = "INSERT INTO tb_user(user_id, user_name, email, user_access, active, user_password, created_at) "
-    			+ "    VALUES (user_id_seq.nextval, ?, ?, ?, ?, ?, ?)";
-    	
-    	try {
-    		connection = ConnectionFactory.getInstance();
-    		preparedStatement = connection.prepareStatement(sql);
-    		
-    		/*user.setAccess(1);
-        	user.setActive(true);
-        	user.setCreated_at(new Date());
-
-    		preparedStatement.setString(1, user.getName());
-    		preparedStatement.setString(2, user.getEmail());
-    		preparedStatement.setInt(3, user.getAccess());
-    		preparedStatement.setBoolean(4, user.isActive());
-    		preparedStatement.setString(5, user.getPassword());
-    		preparedStatement.setDate(6, new java.sql.Date(user.getCreated_at().getTime()));*/
-    		
-    		preparedStatement.execute();
-    	} catch (Exception e) {
-    		System.err.println("[User] " + e.getMessage());
-    		// e.printStackTrace();
-    	} finally {
-    		try {
-				ConnectionFactory.closeConnection();
-			} catch (SQLException e) {
-				System.err.println("[Connection Factory] " + e.getMessage());
-	    		// e.printStackTrace();
-			}
-    	}
-    }
-    
-    @Override
-    public void update(Loja user) throws DBException {
-    	Connection connection = null;
-    	PreparedStatement preparedStatement = null;
-    	String sql = "UPDATE tb_user SET active = ? WHERE user_id = ?";
+    	String sql = "INSERT INTO loja (nr_cnpj, nm_razao_social, nm_loja, nr_telefone, ds_email, cd_plano, id_categoria_loja)"
+    			+ "    VALUES (?, ?, ?, ?, ?, ?, ?)";
     	
     	try {
     		connection = ConnectionFactory.getInstance();
     		preparedStatement = connection.prepareStatement(sql);
 
-    		/*preparedStatement.setBoolean(1, user.isActive());
-    		preparedStatement.setInt(2, user.getUser_id());*/
+    		preparedStatement.setString(1, loja.getNr_cnpj());
+    		preparedStatement.setString(2, loja.getNm_razao_social());
+    		preparedStatement.setString(3, loja.getNm_loja());
+    		preparedStatement.setString(4, loja.getNr_telefone());
+    		preparedStatement.setString(5, loja.getDs_email());
+    		preparedStatement.setString(6, loja.getCd_plano());
+    		preparedStatement.setInt(7, loja.getCategoria_loja().getId_categoria());
     		
     		preparedStatement.execute();
     	} catch (Exception e) {
-    		System.err.println("[User] " + e.getMessage());
-    		// e.printStackTrace();
+    		e.printStackTrace();
     	} finally {
     		try {
 				ConnectionFactory.closeConnection();
 			} catch (SQLException e) {
-				System.err.println("[Connection Factory] " + e.getMessage());
-	    		// e.printStackTrace();
+				e.printStackTrace();
 			}
     	}
     }
     
     @Override
-    public void remove(Loja user) throws DBException {
+    public void update(Loja loja) throws DBException {
     	Connection connection = null;
     	PreparedStatement preparedStatement = null;
-    	String sql = "DELETE FROM tb_user WHERE user_id = ?";
+    	String sql = "UPDATE loja SET nm_loja = ? WHERE id_loja = ?";
     	
     	try {
     		connection = ConnectionFactory.getInstance();
     		preparedStatement = connection.prepareStatement(sql);
-    		// preparedStatement.setInt(1, user.getUser_id());
+
+    		preparedStatement.setString(1, loja.getNm_loja());
+    		preparedStatement.setInt(2, loja.getId_loja());
+    		
     		preparedStatement.execute();
     	} catch (Exception e) {
-    		System.err.println("[User] " + e.getMessage());
-    		// e.printStackTrace();
+    		e.printStackTrace();
     	} finally {
     		try {
 				ConnectionFactory.closeConnection();
 			} catch (SQLException e) {
-				System.err.println("[Connection Factory] " + e.getMessage());
-	    		// e.printStackTrace();
+				e.printStackTrace();
+			}
+    	}
+    }
+    
+    @Override
+    public void remove(Loja loja) throws DBException {
+    	Connection connection = null;
+    	PreparedStatement preparedStatement = null;
+    	String sql = "DELETE FROM loja WHERE id_loja = ?";
+    	
+    	try {
+    		connection = ConnectionFactory.getInstance();
+    		preparedStatement = connection.prepareStatement(sql);
+    		preparedStatement.setInt(1, loja.getId_loja());
+    		preparedStatement.execute();
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	} finally {
+    		try {
+				ConnectionFactory.closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
     	}
     }

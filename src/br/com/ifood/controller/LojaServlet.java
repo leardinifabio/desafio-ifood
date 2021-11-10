@@ -38,7 +38,7 @@ public class LojaServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			String nm_razao_social = request.getParameter("nm_razao_social");
-			Loja loja = new Loja(nm_razao_social);
+			Loja loja = new Loja();
 			dao.save(loja);
 			request.setAttribute("success", "Produto cadastrado com sucesso");
 		} catch (DBException db) {
