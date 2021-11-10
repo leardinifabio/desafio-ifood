@@ -19,6 +19,13 @@ public class Categoria implements Serializable {
 	
 	/* CONSTRUCTOR */
 	
+	public Categoria() {}
+	
+	public Categoria(String nm_razao_social) {
+		super();
+		this.nm_categoria = nm_razao_social;
+	}
+	
 	public Categoria(int id_categoria, String nm_razao_social) {
 		super();
 		this.id_categoria = id_categoria;

@@ -2,7 +2,7 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<t:main title="Index">
+<t:main title="Dashboard">
 	<jsp:attribute name="css"></jsp:attribute>
 	<jsp:attribute name="js"></jsp:attribute>
 	

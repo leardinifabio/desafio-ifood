@@ -26,6 +26,18 @@ public class Loja implements Serializable {
 	
 	public Loja() {}
 	
+	public Loja(String nr_cnpj, String nm_razao_social, String nm_loja, String nr_telefone,
+			String ds_email, String cd_plano, Categoria categoria_loja) {
+		super();
+		this.nr_cnpj = nr_cnpj;
+		this.nm_razao_social = nm_razao_social;
+		this.nm_loja = nm_loja;
+		this.nr_telefone = nr_telefone;
+		this.ds_email = ds_email;
+		this.cd_plano = cd_plano;
+		this.categoria_loja = categoria_loja;
+	}
+	
 	public Loja(int id_loja, String nr_cnpj, String nm_razao_social, String nm_loja, String nr_telefone,
 			String ds_email, String cd_plano, Categoria categoria_loja) {
 		super();
@@ -43,10 +55,6 @@ public class Loja implements Serializable {
 	
 	public int getId_loja() {
 		return id_loja;
-	}
-
-	public void setId_loja(int id_loja) {
-		this.id_loja = id_loja;
 	}
 	
 	public String getNr_cnpj() {
