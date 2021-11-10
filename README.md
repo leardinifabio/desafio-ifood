@@ -14,9 +14,11 @@ As tecnologias usadas na aplicação são:
 > Servlets,
 > JDBC,
 > HTML 5,
-> CSS 3,
+> CSS 3 e
 > Foundation.
 
 ### Padrões de Projeto
-Os padrões de projeto utilizados na aplicação são: Singleton, Command e DAO.
-
+Os padrões de projeto utilizados na aplicação são: 
+> Singleton, 
+> Command e 
+> DAO.
