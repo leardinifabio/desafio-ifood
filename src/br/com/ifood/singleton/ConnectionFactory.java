@@ -23,10 +23,10 @@ public class ConnectionFactory {
 	/* METHODS */
 	
 	/**
-	 * Método responsável por estabelecer conexão com o banco de dados 
+	 * Mï¿½todo responsï¿½vel por estabelecer conexï¿½o com o banco de dados 
 	 * @exception SQLException
 	 * @exception ClassNotFoundException
-	 * @return Conexão com o banco de dados
+	 * @return Conexï¿½o com o banco de dados
 	 */
 	public Connection getConnection() {
 		Connection connection = null;
@@ -46,9 +46,9 @@ public class ConnectionFactory {
 	}
 	
 	/**
-	 * Método responsável por verificar se a conexão com o banco de dados
-	 * está ativa, caso não esteja, cria uma conexão e retorna a instância de conexão
-	 * @return Instância de conexão com o banco de dados
+	 * Mï¿½todo responsï¿½vel por verificar se a conexï¿½o com o banco de dados
+	 * estï¿½ ativa, caso nï¿½o esteja, cria uma conexï¿½o e retorna a instï¿½ncia de conexï¿½o
+	 * @return Instï¿½ncia de conexï¿½o com o banco de dados
 	 */
 	public static Connection getInstance() { 
 		if (connection.equals(null)) {
@@ -58,7 +58,7 @@ public class ConnectionFactory {
 	}
 	
 	/**
-	 * Método responsável por fechar a conexão com o banco de dados
+	 * Mï¿½todo responsï¿½vel por fechar a conexï¿½o com o banco de dados
 	 * @throws SQLException
 	 */
 	public static void closeConnection() throws SQLException {

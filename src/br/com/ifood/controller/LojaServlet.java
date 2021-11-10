@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,10 +13,6 @@ import br.com.ifood.exception.DBException;
 import br.com.ifood.factory.DAOFactory;
 import br.com.ifood.models.Loja;
 
-/**
- * Servlet implementation class LojaServlet
- */
-@WebServlet("/loja")
 public class LojaServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
@@ -34,7 +29,7 @@ public class LojaServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		List<Loja> lojas = dao.getAll();
 		request.setAttribute("lojas", lojas);
-		request.getRequestDispatcher("lista-lojas.jsp").forward(request, response);
+		request.getRequestDispatcher("lojas/index.jsp").forward(request, response);
 	}
 
 	/**
@@ -53,7 +48,7 @@ public class LojaServlet extends HttpServlet {
 			e.printStackTrace();
 			request.setAttribute("error", e.getMessage());
 		}
-		request.getRequestDispatcher("cadastro-loja.jsp").forward(request, response);
+		request.getRequestDispatcher("lojas/create.jsp").forward(request, response);
 	}
 
 }

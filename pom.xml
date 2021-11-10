@@ -15,20 +15,30 @@
   	 </properties>
 	 
 	 <dependencies>
-		 <dependency>
+		<dependency>
 		     <groupId>javax.servlet</groupId>
 		     <artifactId>javax.servlet-api</artifactId>
 		     <version>3.1.0</version>
 		     <scope>provided</scope>
-		 </dependency>
-		 <dependency>
+		</dependency>
+		<dependency>
 		     <groupId>javax.servlet.jsp</groupId>	
 		     <artifactId>javax.servlet.jsp-api</artifactId>
 		     <version>2.3.1</version>
 		     <scope>provided</scope>
-		 </dependency>
+		</dependency>
+		<dependency>
+    		<groupId>javax.servlet</groupId>
+    		<artifactId>jstl</artifactId>
+    		<version>1.2</version>
+		</dependency>
+		<dependency>
+            <groupId>jstl</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
 
-		 <!-- Jackson -->
+		<!-- Jackson -->
 	   	<dependency>
 	   	  	<groupId>com.fasterxml.jackson.core</groupId>
 	   	  	<artifactId>jackson-core</artifactId>
@@ -60,7 +70,7 @@
 		    <groupId>com.oracle.jdbc</groupId>
 		    <artifactId>ojdbc14</artifactId>
 		    <version>10.2.0.2.0</version>
-		</dependency>
+		</dependency>		
 	</dependencies>
 	 
 	 <build>
