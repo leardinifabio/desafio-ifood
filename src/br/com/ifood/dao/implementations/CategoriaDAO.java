@@ -22,8 +22,8 @@ public class CategoriaDAO implements DAO<Categoria> {
     	PreparedStatement preparedStatement = null;
     	String sql = "SELECT"
     			+ "	   id_categoria,"
-    			+ "    nm_categoria"
-    			+ "FROM categoria"
+    			+ "    nm_categoria "
+    			+ "FROM categoria "
     			+ "WHERE id_categoria = ?";
     	
     	try {
@@ -58,7 +58,7 @@ public class CategoriaDAO implements DAO<Categoria> {
     	PreparedStatement preparedStatement = null;
     	String sql = "SELECT"
     			+ "	   id_categoria,"
-    			+ "    nm_categoria"
+    			+ "    nm_categoria "
     			+ "FROM categoria";
     	
     	try {
@@ -87,7 +87,7 @@ public class CategoriaDAO implements DAO<Categoria> {
     }
     
     @Override
-    public void save(Categoria categoria) throws DBException {
+    public Optional<Categoria> save(Categoria categoria) throws DBException {
     	Connection connection = null;
     	PreparedStatement preparedStatement = null;
     	String sql = "INSERT INTO categoria (nm_categoria) VALUES (?)";
@@ -108,6 +108,8 @@ public class CategoriaDAO implements DAO<Categoria> {
 				e.printStackTrace();
 			}
     	}
+    	
+    	return Optional.ofNullable(categoria);
     }
     
     @Override

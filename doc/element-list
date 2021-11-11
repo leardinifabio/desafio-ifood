@@ -1,0 +1,9 @@
+br.com.ifood.controller
+br.com.ifood.converter
+br.com.ifood.dao
+br.com.ifood.dao.implementations
+br.com.ifood.exception
+br.com.ifood.factory
+br.com.ifood.models
+br.com.ifood.services
+br.com.ifood.singleton

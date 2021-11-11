@@ -21,15 +21,15 @@ public class Categoria implements Serializable {
 	
 	public Categoria() {}
 	
-	public Categoria(String nm_razao_social) {
+	public Categoria(String nm_categoria) {
 		super();
-		this.nm_categoria = nm_razao_social;
+		this.nm_categoria = nm_categoria;
 	}
 	
-	public Categoria(int id_categoria, String nm_razao_social) {
+	public Categoria(int id_categoria, String nm_categoria) {
 		super();
 		this.id_categoria = id_categoria;
-		this.nm_categoria = nm_razao_social;
+		this.nm_categoria = nm_categoria;
 	}
 
 	/* GETTERS & SETTERS */

@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"br.com.ifood.controller"},{"l":"br.com.ifood.converter"},{"l":"br.com.ifood.dao"},{"l":"br.com.ifood.dao.implementations"},{"l":"br.com.ifood.exception"},{"l":"br.com.ifood.factory"},{"l":"br.com.ifood.models"},{"l":"br.com.ifood.services"},{"l":"br.com.ifood.singleton"}];updateSearchResults();

@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
-  <display-name>iFood</display-name>
-  
-  <servlet>
-  	<servlet-name>LojaServlet</servlet-name>
-  	<servlet-class>br.com.ifood.controller.LojaServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-  	<servlet-name>LojaServlet</servlet-name>
-  	<url-pattern>/lojas</url-pattern>
-  </servlet-mapping>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns="http://java.sun.com/xml/ns/javaee" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" 
+	id="WebApp_ID" version="3.0">
+	<display-name>iFood</display-name>
+	
+	<servlet>
+		<servlet-name>LojaServlet</servlet-name>
+		<servlet-class>br.com.ifood.controller.LojaServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>CardapioServlet</servlet-name>
+		<servlet-class>br.com.ifood.controller.CardapioServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>LojaServlet</servlet-name>
+		<url-pattern>/lojas</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>CardapioServlet</servlet-name>
+		<url-pattern>/cardapios</url-pattern>
+	</servlet-mapping>
   
 </web-app>

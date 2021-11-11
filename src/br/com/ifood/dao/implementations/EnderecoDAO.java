@@ -20,7 +20,18 @@ public class EnderecoDAO implements DAO<Endereco> {
     	Endereco endereco = null;
         Connection connection = null;
     	PreparedStatement preparedStatement = null;
-    	String sql = "";
+    	String sql = "SELECT "
+    			+ "		id_endereco,"
+    			+ "		nr_cep, "
+    			+ "		cd_uf, "
+    			+ "		nm_cidade, "
+    			+ "		nm_bairro, "
+    			+ "		nm_endereco, "
+    			+ "		nr_numero, "
+    			+ "		ds_complemento, "
+    			+ "		id_loja_endereco "
+    			+ "FROM endereco "
+    			+ "		WHERE id_endereco = ?";
     	
     	try {
     		connection = ConnectionFactory.getInstance();
@@ -30,7 +41,64 @@ public class EnderecoDAO implements DAO<Endereco> {
     		
     		while(result.next()) {
     			endereco = new Endereco(
-    					// result.getInt("id_categoria"),
+    					result.getInt("id_endereco"),
+    					result.getString("nr_cep"),
+    					result.getString("cd_uf"),
+    					result.getString("nm_cidade"),
+    					result.getString("nm_bairro"),
+    					result.getString("nm_endereco"),
+    					result.getInt("nr_numero"),
+    					result.getString("ds_complemento"),
+    					result.getInt("id_loja_endereco")
+					);
+    		}
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	} finally {
+    		try {
+				ConnectionFactory.closeConnection();
+			} catch (SQLException e) {
+	    		e.printStackTrace();
+			}
+    	}
+    	
+        return Optional.ofNullable(endereco);
+    }
+    
+    public Optional<Endereco> getByLojaId(int id) {
+    	Endereco endereco = null;
+        Connection connection = null;
+    	PreparedStatement preparedStatement = null;
+    	String sql = "SELECT "
+    			+ "		id_endereco,"
+    			+ "		nr_cep, "
+    			+ "		cd_uf, "
+    			+ "		nm_cidade, "
+    			+ "		nm_bairro, "
+    			+ "		nm_endereco, "
+    			+ "		nr_numero, "
+    			+ "		ds_complemento, "
+    			+ "		id_loja_endereco "
+    			+ "FROM endereco "
+    			+ "		WHERE id_loja_endereco = ?";
+    	
+    	try {
+    		connection = ConnectionFactory.getInstance();
+    		preparedStatement = connection.prepareStatement(sql);
+    		preparedStatement.setInt(1, id);
+    		ResultSet result = preparedStatement.executeQuery();
+    		
+    		while(result.next()) {
+    			endereco = new Endereco(
+    					result.getInt("id_endereco"),
+    					result.getString("nr_cep"),
+    					result.getString("cd_uf"),
+    					result.getString("nm_cidade"),
+    					result.getString("nm_bairro"),
+    					result.getString("nm_endereco"),
+    					result.getInt("nr_numero"),
+    					result.getString("ds_complemento"),
+    					result.getInt("id_loja_endereco")
 					);
     		}
     	} catch (Exception e) {
@@ -51,7 +119,17 @@ public class EnderecoDAO implements DAO<Endereco> {
     	List<Endereco> enderecos = new ArrayList<>();
         Connection connection = null;
     	PreparedStatement preparedStatement = null;
-    	String sql = "";
+    	String sql = "SELECT "
+    			+ "		id_endereco,"
+    			+ "		nr_cep, "
+    			+ "		cd_uf, "
+    			+ "		nm_cidade, "
+    			+ "		nm_bairro, "
+    			+ "		nm_endereco, "
+    			+ "		nr_numero, "
+    			+ "		ds_complemento, "
+    			+ "		id_loja_endereco "
+    			+ "FROM endereco";
     	
     	try {
     		connection = ConnectionFactory.getInstance();
@@ -59,10 +137,18 @@ public class EnderecoDAO implements DAO<Endereco> {
     		ResultSet result = preparedStatement.executeQuery();
     		
     		while(result.next()) {
-    			Endereco categoria = new Endereco(
-    					// result.getInt("id_categoria"),
+    			Endereco endereco = new Endereco(
+    					result.getInt("id_endereco"),
+    					result.getString("nr_cep"),
+    					result.getString("cd_uf"),
+    					result.getString("nm_cidade"),
+    					result.getString("nm_bairro"),
+    					result.getString("nm_endereco"),
+    					result.getInt("nr_numero"),
+    					result.getString("ds_complemento"),
+    					result.getInt("id_loja_endereco")
 					);
-    			enderecos.add(categoria);
+    			enderecos.add(endereco);
     		}
     	} catch (Exception e) {
     		e.printStackTrace();
@@ -78,7 +164,7 @@ public class EnderecoDAO implements DAO<Endereco> {
     }
     
     @Override
-    public void save(Endereco endereco) throws DBException {
+    public Optional<Endereco> save(Endereco endereco) throws DBException {
     	Connection connection = null;
     	PreparedStatement preparedStatement = null;
     	String sql = "INSERT INTO endereco (nr_cep, cd_uf, nm_cidade, nm_bairro, nm_endereco, nr_numero, ds_complemento, id_loja_endereco) "
@@ -86,18 +172,26 @@ public class EnderecoDAO implements DAO<Endereco> {
     	
     	try {
     		connection = ConnectionFactory.getInstance();
-    		preparedStatement = connection.prepareStatement(sql);
+    		preparedStatement = connection.prepareStatement(sql, new String[] {"id_endereco"});
 
-    		 preparedStatement.setString(1, endereco.getNr_cep());
-    		 preparedStatement.setString(2, endereco.getCd_uf());
-    		 preparedStatement.setString(3, endereco.getNm_cidade());
-    		 preparedStatement.setString(4, endereco.getNm_bairro());
-    		 preparedStatement.setString(5, endereco.getNm_endereco());
-    		 preparedStatement.setInt(6, endereco.getNr_numero());
-    		 preparedStatement.setString(7, endereco.getDs_complemento());
-    		 preparedStatement.setInt(8, endereco.getEndereco_loja().getId_loja());
+    		preparedStatement.setString(1, endereco.getNr_cep());
+    		preparedStatement.setString(2, endereco.getCd_uf());
+    		preparedStatement.setString(3, endereco.getNm_cidade());
+    		preparedStatement.setString(4, endereco.getNm_bairro());
+    		preparedStatement.setString(5, endereco.getNm_endereco());
+    		preparedStatement.setInt(6, endereco.getNr_numero());
+    		preparedStatement.setString(7, endereco.getDs_complemento());
+    		preparedStatement.setInt(8, endereco.getId_endereco_loja());
     		
-    		preparedStatement.execute();
+    		int affectedRows = preparedStatement.executeUpdate();
+     		if (affectedRows == 0) {
+     			throw new DBException("Creating endereco failed, no rows affected.");
+     		}
+     		
+     		ResultSet result = preparedStatement.getGeneratedKeys();
+     		if (result.next()) {
+     			endereco.setId_endereco(result.getInt(1));
+     		}
     	} catch (Exception e) {
     		e.printStackTrace();
     	} finally {
@@ -107,20 +201,38 @@ public class EnderecoDAO implements DAO<Endereco> {
 				e.printStackTrace();
 			}
     	}
+    	
+    	return Optional.ofNullable(endereco);
     }
     
     @Override
     public void update(Endereco endereco) throws DBException {
     	Connection connection = null;
     	PreparedStatement preparedStatement = null;
-    	String sql = "UPDATE endereco SET nm_endereco = ? WHERE id_endereco= ?";
+    	String sql = "UPDATE endereco "
+    			+ "SET 	nr_cep = ?, "
+    			+ "		cd_uf = ?, "
+    			+ "		nm_cidade = ?, "
+    			+ "		nm_bairro = ?, "
+    			+ "		nm_endereco = ?, "
+    			+ "		nr_numero = ?, "
+    			+ "		ds_complemento = ?, "
+    			+ "		id_loja_endereco = ? "
+    			+ "WHERE id_endereco= ?";
     	
     	try {
     		connection = ConnectionFactory.getInstance();
     		preparedStatement = connection.prepareStatement(sql);
 
-    		 preparedStatement.setString(1, endereco.getNm_endereco());
-    		 preparedStatement.setInt(2, endereco.getId_endereco());
+    		preparedStatement.setString(1, endereco.getNr_cep());
+	   		preparedStatement.setString(2, endereco.getCd_uf());
+	   		preparedStatement.setString(3, endereco.getNm_cidade());
+	   		preparedStatement.setString(4, endereco.getNm_bairro());
+	   		preparedStatement.setString(5, endereco.getNm_endereco());
+	   		preparedStatement.setInt(6, endereco.getNr_numero());
+	   		preparedStatement.setString(7, endereco.getDs_complemento());
+	   		preparedStatement.setInt(8, endereco.getId_endereco_loja());
+	   		preparedStatement.setInt(9, endereco.getId_endereco());
     		
     		preparedStatement.execute();
     	} catch (Exception e) {

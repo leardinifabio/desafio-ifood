@@ -11,7 +11,7 @@ public interface DAO<T> {
 	
 	List<T> getAll();
 	
-	void save(T object) throws DBException;
+	Optional<T> save(T object) throws DBException;
  	
 	void update(T object) throws DBException;
 	

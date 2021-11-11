@@ -10,7 +10,6 @@ import java.util.Optional;
 
 import br.com.ifood.dao.DAO;
 import br.com.ifood.exception.DBException;
-import br.com.ifood.models.Categoria;
 import br.com.ifood.models.Loja;
 import br.com.ifood.singleton.ConnectionFactory;
 
@@ -22,18 +21,16 @@ public class LojaDAO implements DAO<Loja> {
         Connection connection = null;
     	PreparedStatement preparedStatement = null;
     	String sql = "SELECT"
-    			+ "	   loja.id_loja,"
-    			+ "    loja.nr_cnpj,"
-    			+ "    loja.nm_razao_social,"
-    			+ "    loja.nm_loja,"
-    			+ "    loja.nr_telefone,"
-    			+ "    loja.ds_email,"
-    			+ "    loja.cd_plano,"
-    			+ "    categoria.id_categoria,"
-    			+ "    categoria.nm_categoria "
+    			+ "	   	id_loja,"
+    			+ "    	nr_cnpj,"
+    			+ "    	nm_razao_social,"
+    			+ "    	nm_loja,"
+    			+ "    	nr_telefone,"
+    			+ "    	ds_email,"
+    			+ "    	cd_plano,"
+    			+ "    	id_categoria_loja "
     			+ "FROM loja"
-    			+ "    INNER JOIN categoria ON loja.id_categoria_loja = categoria.id_categoria "
-    			+ "WHERE loja.id_loja = ?";
+    			+ "		WHERE loja.id_loja = ?";
     	
     	try {
     		connection = ConnectionFactory.getInstance();
@@ -42,11 +39,6 @@ public class LojaDAO implements DAO<Loja> {
     		ResultSet result = preparedStatement.executeQuery();
     		
     		while(result.next()) {
-    			Categoria categoria = new Categoria(
-    					result.getInt("id_categoria"),
-    					result.getString("nm_categoria")
-					);
-    			
     			loja = new Loja(
     					result.getInt("id_loja"),
     					result.getString("nr_cnpj"), 
@@ -55,7 +47,7 @@ public class LojaDAO implements DAO<Loja> {
     					result.getString("nr_telefone"),
     					result.getString("ds_email"),
     					result.getString("cd_plano"),
-    					categoria
+    					result.getInt("id_categoria_loja")
 					);
     		}
     	} catch (Exception e) {
@@ -77,17 +69,15 @@ public class LojaDAO implements DAO<Loja> {
         Connection connection = null;
     	PreparedStatement preparedStatement = null;
     	String sql = "SELECT"
-    			+ "	   loja.id_loja,"
-    			+ "    loja.nr_cnpj,"
-    			+ "    loja.nm_razao_social,"
-    			+ "    loja.nm_loja,"
-    			+ "    loja.nr_telefone,"
-    			+ "    loja.ds_email,"
-    			+ "    loja.cd_plano,"
-    			+ "    categoria.id_categoria,"
-    			+ "    categoria.nm_categoria "
-    			+ "FROM loja"
-    			+ "    INNER JOIN categoria ON loja.id_categoria_loja = categoria.id_categoria";
+    			+ "	   	id_loja,"
+    			+ "    	nr_cnpj,"
+    			+ "    	nm_razao_social,"
+    			+ "    	nm_loja,"
+    			+ "    	nr_telefone,"
+    			+ "    	ds_email,"
+    			+ "    	cd_plano,"
+    			+ "    	id_categoria_loja "
+    			+ "FROM loja";
     	
     	try {
     		connection = ConnectionFactory.getInstance();
@@ -95,11 +85,6 @@ public class LojaDAO implements DAO<Loja> {
     		ResultSet result = preparedStatement.executeQuery();
     		
     		while(result.next()) {
-    			Categoria categoria = new Categoria(
-    					result.getInt("id_categoria"),
-    					result.getString("nm_categoria")
-					);
-    			
     			Loja loja = new Loja(
     					result.getInt("id_loja"),
     					result.getString("nr_cnpj"), 
@@ -108,7 +93,7 @@ public class LojaDAO implements DAO<Loja> {
     					result.getString("nr_telefone"),
     					result.getString("ds_email"),
     					result.getString("cd_plano"),
-    					categoria
+    					result.getInt("id_categoria_loja")
 					);
     			lojas.add(loja);
     		}
@@ -126,11 +111,59 @@ public class LojaDAO implements DAO<Loja> {
     }
     
     @Override
-    public void save(Loja loja) throws DBException {
+    public Optional<Loja> save(Loja loja) throws DBException {
     	Connection connection = null;
     	PreparedStatement preparedStatement = null;
     	String sql = "INSERT INTO loja (nr_cnpj, nm_razao_social, nm_loja, nr_telefone, ds_email, cd_plano, id_categoria_loja)"
     			+ "    VALUES (?, ?, ?, ?, ?, ?, ?)";
+    	
+    	try {
+    		connection = ConnectionFactory.getInstance();
+    		preparedStatement = connection.prepareStatement(sql, new String[] {"id_loja"});
+
+    		preparedStatement.setString(1, loja.getNr_cnpj());
+    		preparedStatement.setString(2, loja.getNm_razao_social());
+    		preparedStatement.setString(3, loja.getNm_loja());
+    		preparedStatement.setString(4, loja.getNr_telefone());
+    		preparedStatement.setString(5, loja.getDs_email());
+    		preparedStatement.setString(6, loja.getCd_plano());
+    		preparedStatement.setInt(7, loja.getId_categoria_loja());
+    		
+    		int affectedRows = preparedStatement.executeUpdate();
+    		if (affectedRows == 0) {
+    			throw new DBException("Creating loja failed, no rows affected.");
+    		}
+    		
+    		ResultSet result = preparedStatement.getGeneratedKeys();
+    		if (result.next()) {
+    			loja.setId_loja(result.getInt(1));
+    		}
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	} finally {
+    		try {
+				ConnectionFactory.closeConnection();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+    	}
+    	
+    	return Optional.ofNullable(loja);
+    }
+    
+    @Override
+    public void update(Loja loja) throws DBException {
+    	Connection connection = null;
+    	PreparedStatement preparedStatement = null;
+    	String sql = "UPDATE loja SET "
+    			+ "		nr_cnpj = ?, "
+    			+ "		nm_razao_social = ?, "
+    			+ "		nm_loja = ?, "
+    			+ "		nr_telefone = ?, "
+    			+ "		ds_email = ?, "
+    			+ "		cd_plano = ?, "
+    			+ "		id_categoria_loja = ? "
+    			+ "WHERE id_loja = ?";
     	
     	try {
     		connection = ConnectionFactory.getInstance();
@@ -141,33 +174,9 @@ public class LojaDAO implements DAO<Loja> {
     		preparedStatement.setString(3, loja.getNm_loja());
     		preparedStatement.setString(4, loja.getNr_telefone());
     		preparedStatement.setString(5, loja.getDs_email());
-    		preparedStatement.setString(6, loja.getCd_plano());
-    		preparedStatement.setInt(7, loja.getCategoria_loja().getId_categoria());
-    		
-    		preparedStatement.execute();
-    	} catch (Exception e) {
-    		e.printStackTrace();
-    	} finally {
-    		try {
-				ConnectionFactory.closeConnection();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-    	}
-    }
-    
-    @Override
-    public void update(Loja loja) throws DBException {
-    	Connection connection = null;
-    	PreparedStatement preparedStatement = null;
-    	String sql = "UPDATE loja SET nm_loja = ? WHERE id_loja = ?";
-    	
-    	try {
-    		connection = ConnectionFactory.getInstance();
-    		preparedStatement = connection.prepareStatement(sql);
-
-    		preparedStatement.setString(1, loja.getNm_loja());
-    		preparedStatement.setInt(2, loja.getId_loja());
+    		preparedStatement.setString(6, "1");
+    		preparedStatement.setInt(7, loja.getId_categoria_loja());
+    		preparedStatement.setInt(8, loja.getId_loja());
     		
     		preparedStatement.execute();
     	} catch (Exception e) {

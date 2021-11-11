@@ -8,9 +8,10 @@
     $(function () {
 
         // Eventos
-        $('.delete').on('click', function (e) {
+        $('.delete').on('click', function (event) {
             event.preventDefault();
-
+            
+            const href = $(this).attr('href');
             const swalWithBootstrapButtons = Swal.mixin({
             	customClass: {
 	            	confirmButton: 'btn btn-success',
@@ -34,7 +35,7 @@
                         'O item foi removido com sucesso.',
                         'success'
                     ).then(function () {
-                        window.location.href = $(".delete").attr('href');
+                        window.location.href = href;
                     });
                 } else if (
                     // Read more about handling dismissals

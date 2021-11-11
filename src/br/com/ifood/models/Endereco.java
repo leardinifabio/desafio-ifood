@@ -21,14 +21,14 @@ public class Endereco implements Serializable {
 	private String nm_endereco;
 	private int nr_numero;
 	private String ds_complemento; 
-	private Loja endereco_loja;
+	private int id_endereco_loja;
 	
 	/* CONSTRUCTOR */
 	
 	public Endereco() {}
 	
 	public Endereco(String nr_cep, String cd_uf, String nm_cidade, String nm_bairro,
-			String nm_endereco, int nr_numero, String ds_complemento, Loja endereco_loja) {
+			String nm_endereco, int nr_numero, String ds_complemento, int id_endereco_loja) {
 		super();
 		this.nr_cep = nr_cep;
 		this.cd_uf = cd_uf;
@@ -37,11 +37,11 @@ public class Endereco implements Serializable {
 		this.nm_endereco = nm_endereco;
 		this.nr_numero = nr_numero;
 		this.ds_complemento = ds_complemento;
-		this.endereco_loja = endereco_loja;
+		this.id_endereco_loja = id_endereco_loja;
 	}
 	
 	public Endereco(int id_endereco, String nr_cep, String cd_uf, String nm_cidade, String nm_bairro,
-			String nm_endereco, int nr_numero, String ds_complemento, Loja endereco_loja) {
+			String nm_endereco, int nr_numero, String ds_complemento, int id_endereco_loja) {
 		super();
 		this.id_endereco = id_endereco;
 		this.nr_cep = nr_cep;
@@ -51,13 +51,17 @@ public class Endereco implements Serializable {
 		this.nm_endereco = nm_endereco;
 		this.nr_numero = nr_numero;
 		this.ds_complemento = ds_complemento;
-		this.endereco_loja = endereco_loja;
+		this.id_endereco_loja = id_endereco_loja;
 	}
 
 	/* GETTERS & SETTERS */
 
 	public int getId_endereco() {
 		return id_endereco;
+	}
+	
+	public void setId_endereco(int id_endereco) {
+		this.id_endereco = id_endereco;
 	}
 
 	public String getNr_cep() {
@@ -116,12 +120,12 @@ public class Endereco implements Serializable {
 		this.ds_complemento = ds_complemento;
 	}
 
-	public Loja getEndereco_loja() {
-		return endereco_loja;
+	public int getId_endereco_loja() {
+		return id_endereco_loja;
 	}
 
-	public void setEndereco_loja(Loja endereco_loja) {
-		this.endereco_loja = endereco_loja;
+	public void setId_endereco_loja(int id_endereco_loja) {
+		this.id_endereco_loja = id_endereco_loja;
 	}
 	
 	/* METHODS */
@@ -132,8 +136,8 @@ public class Endereco implements Serializable {
 		int result = 1;
 		result = prime * result + ((cd_uf == null) ? 0 : cd_uf.hashCode());
 		result = prime * result + ((ds_complemento == null) ? 0 : ds_complemento.hashCode());
-		result = prime * result + ((endereco_loja == null) ? 0 : endereco_loja.hashCode());
 		result = prime * result + id_endereco;
+		result = prime * result + id_endereco_loja;
 		result = prime * result + ((nm_bairro == null) ? 0 : nm_bairro.hashCode());
 		result = prime * result + ((nm_cidade == null) ? 0 : nm_cidade.hashCode());
 		result = prime * result + ((nm_endereco == null) ? 0 : nm_endereco.hashCode());
@@ -161,12 +165,9 @@ public class Endereco implements Serializable {
 				return false;
 		} else if (!ds_complemento.equals(other.ds_complemento))
 			return false;
-		if (endereco_loja == null) {
-			if (other.endereco_loja != null)
-				return false;
-		} else if (!endereco_loja.equals(other.endereco_loja))
-			return false;
 		if (id_endereco != other.id_endereco)
+			return false;
+		if (id_endereco_loja != other.id_endereco_loja)
 			return false;
 		if (nm_bairro == null) {
 			if (other.nm_bairro != null)
